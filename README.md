@@ -1,19 +1,19 @@
 # Cosmos Fable
 
-Десктопное приложение в стиле **Bento Glass** на Python (Flet) для учета питания (КБЖУ), адаптивных тренировок и ведения заметок с фокус-таймером.
+A modern **Bento Glass** desktop tracker built with Python and Flet for daily nutrition (macros), adaptive workout cycles, and focused study notes.
 
-## Основные возможности
+## Key Features
 
-* **Счетчик КБЖУ и база продуктов:** живой поиск по встроенному справочнику из 55+ базовых продуктов с пересчетом на граммы, пополнение собственной базы, автоформула калорий (`Б×4 + Ж×9 + У×4`), шаблоны приемов пищи и история по датам.
-* **Адаптивный фитнес-трекер:** конструктор плавающего цикла тренировок и отдыха (например, `3 через 1`) с автоматическим сдвигом при пропуске, таймером отдыха (60/90/120 сек) и прогнозом на 7 дней вперед.
-* **Заметки и фокус-таймер:** встроенный Pomodoro-таймер (25 минут), гибкие списки задач с массовым импортом и база знаний с прикреплением файлов.
-* **Аналитика и кастомизация:** Bento-график калорий за 7 дней, трекер веса и водного баланса, галерея космических тем с созданием своих палитр и резервное копирование базы в JSON.
+* **Nutrition & Macros Tracker:** Live search across 55+ built-in foods with automatic gram scaling, custom food database expansion, auto-calculated calories (`P×4 + F×9 + C×4`), meal templates, and daily logs.
+* **Adaptive Workout Planner:** Flexible floating training/rest cycle builder (e.g. `3 on / 1 off`) with automatic rollover, rest timer (`60s / 90s / 120s`), and a 7-day schedule forecast.
+* **Notes & Focus Timer:** Built-in Pomodoro focus timer (`25:00`), task roadmaps with bulk list import, and a knowledge base with file attachments.
+* **Analytics & Customization:** 7-day calorie bar chart, body weight & water intake tracking, customizable space themes, one-click JSON backups, and instant **EN / RU** localization.
 
-## Установка и запуск
+## Quick Start
 
 ```bash
-git clone <URL_ТВОЕГО_РЕПОЗИТОРИЯ>
-cd cosmos_fable
+git clone https://github.com
+cd cosmos-fable
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
