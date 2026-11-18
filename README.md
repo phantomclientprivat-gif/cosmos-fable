@@ -20,6 +20,6 @@ python main.py
 ```
 
 ## Download for Android
-Download **cosmos fable.apk** directly from the [Releases](/phantomclientprivat-gif/cosmos-fable/releases/tag/v1.0.0) page.
+Download **cosmos fable.apk** directly from the [Releases](https://github.com/phantomclientprivat-gif/cosmos-fable/releases/tag/v1.0.0) page.
 
 
