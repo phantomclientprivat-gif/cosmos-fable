@@ -18,6 +18,7 @@ def main(page: ft.Page):
     page.theme = ft.Theme(page_transitions=ft.PageTransitionsTheme(android=ft.PageTransitionTheme.CUPERTINO, linux=ft.PageTransitionTheme.CUPERTINO))
 
     state = {"db": load_db(), "tab": 0}
+    my_ip = get_local_ip()
     theme = state["db"]["theme"]
     page.bgcolor = theme["bg"]
 
