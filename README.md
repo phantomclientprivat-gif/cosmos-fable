@@ -19,3 +19,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 python main.py
 ```
+
+## Download for Android
+
+Download **`cosmos_fable.apk`** directly from the [Releases](https://github.com) page and install it on your Android device.
