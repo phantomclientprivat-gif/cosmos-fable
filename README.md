@@ -7,12 +7,12 @@ A modern **Bento Glass** cross-platform tracker built with Python and Flet for d
 ### Linux (One-Command Auto Setup)
 Automatically creates a virtual environment, installs dependencies, adds a desktop shortcut, and launches the app:
 ```bash
-git clone https://://github.com/cosmos-fable.git && cd cosmos-fable && ./setup.sh
+git clone https://github.com/phantomclientprivat-gif/cosmos-fable.git && cd cosmos-fable && ./setup.sh
 ```
 
 ### Windows / macOS (Manual Setup)
 ```bash
-git clone https://://github.com/cosmos-fable.git
+git clone https://github.com/phantomclientprivat-gif/cosmos-fable.git
 cd cosmos-fable
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
