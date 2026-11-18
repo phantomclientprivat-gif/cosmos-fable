@@ -21,4 +21,4 @@ python main.py
 
 ## Download for Android
 
-Download **cosmos_fable.apk** directly from the [Releases](https://github.com) page.
+Download **cosmos fable.apk** directly from the [Releases](https://github.com) page.
