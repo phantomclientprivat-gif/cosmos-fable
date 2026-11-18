@@ -164,24 +164,26 @@ def start_wifi_server(state_ref, on_remote_update):
 
 def sync_via_wifi(local_db, host_ip):
     ip = (host_ip or "").strip()
+    lang = local_db.get("lang", "en")
     if not ip:
-        return local_db, "Укажи IP ПК"
+        return local_db, ("Укажи IP устройства" if lang == "ru" else "Enter device IP")
     url = f"http://{ip}:8765/sync"
     try:
         with httpx.Client(timeout=3.0) as cl:
             r = cl.get(url)
             if r.status_code != 200:
-                return local_db, f"Ошибка ({r.status_code})"
+                return local_db, (f"Ошибка ({r.status_code})" if lang == "ru" else f"Error ({r.status_code})")
             remote_db = r.json()
             r_ts = float(remote_db.get("updated_at", 0))
             l_ts = float(local_db.get("updated_at", 0))
             if r_ts > l_ts + 1.0:
                 db, _ = rollover(remote_db)
+                db["peer_ip"] = ip
                 save_db(db)
-                return db, "Обновлено с ПК"
+                return db, ("Данные получены по Wi-Fi" if lang == "ru" else "Updated via Wi-Fi")
             elif l_ts > r_ts + 1.0:
                 cl.post(url, content=json.dumps(local_db, ensure_ascii=False).encode("utf-8"))
-                return local_db, "Отправлено на ПК"
-            return local_db, "Синхронизировано"
+                return local_db, ("Данные отправлены по Wi-Fi" if lang == "ru" else "Sent via Wi-Fi")
+            return local_db, ("Уже синхронизировано" if lang == "ru" else "Already synced")
     except Exception:
-        return local_db, "ПК недоступен в Wi-Fi"
+        return local_db, ("Устройство недоступно в Wi-Fi" if lang == "ru" else "Device unreachable in Wi-Fi")

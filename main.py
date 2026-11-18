@@ -72,14 +72,38 @@ def main(page: ft.Page):
         bottom_sheet.open = False
         page.update()
 
-    sync_lbl = ft.Text(tr(state["db"], "local_db"), size=11, color="#94a3b8")
+    sync_lbl = ft.Text(f"Wi-Fi IP: {my_ip}", size=11, color="#94a3b8")
+
+    def on_remote_update(new_db):
+        state["db"] = new_db
+        try:
+            refresh()
+            toast("Синхронизировано по Wi-Fi" if new_db.get("lang", "en") == "ru" else "Synced via Wi-Fi")
+        except Exception:
+            pass
+
+    start_wifi_server(state, on_remote_update)
+
+    def do_wifi_sync(peer_ip=None):
+        play_click()
+        target = peer_ip if peer_ip is not None else state["db"].get("peer_ip", "")
+        if target:
+            state["db"]["peer_ip"] = target.strip()
+            save_db(state["db"])
+        new_db, msg = sync_via_wifi(state["db"], target)
+        state["db"] = new_db
+        refresh()
+        toast(msg)
 
     def run_sync(manual=False):
         if manual:
-            play_click()
-            res = create_backup()
-            toast(res)
-            page.update()
+            if state["db"].get("peer_ip", "").strip():
+                do_wifi_sync()
+            else:
+                play_click()
+                res = create_backup()
+                toast(res)
+                page.update()
 
     def build_profile_page():
         prof = state["db"].setdefault("profile", {"weight": 70.0, "height": 175, "age": 16, "water": 0})
@@ -232,14 +256,27 @@ def main(page: ft.Page):
                 theme, accent_border=True,
             ),
             analytics_card,
+            glass_card(
+                ft.Column([
+                    ft.Row([
+                        ft.Text("Wi-Fi Синхронизация" if state["db"].get("lang", "en") == "ru" else "Wi-Fi Sync", size=15, weight=ft.FontWeight.BOLD, color=theme["accent"]),
+                        ft.Text(f"IP: {my_ip}", size=12, color="#94a3b8"),
+                    ], alignment=ft.MainAxisAlignment.SPACE_BETWEEN),
+                    ft.Row([
+                        ip_in := styled_input("IP второго устройства" if state["db"].get("lang", "en") == "ru" else "Peer device IP", theme, state["db"].get("peer_ip", ""), expand=True),
+                        pill_btn("Sync", theme, lambda e: do_wifi_sync(ip_in.value), icon=ft.Icons.SYNC, small=True),
+                    ], spacing=8),
+                ], spacing=8),
+                theme, padding=14,
+            ),
 
                         glass_card(
                 ft.Row([
                     ft.Text(tr(state["db"], "lang_label"), size=14, weight=ft.FontWeight.BOLD, color="#ffffff"),
                     ft.Row(
                         controls=[
-                            pill_btn("RU", theme, lambda e: (play_click(), state["db"].update({"lang": "ru"}), save_db(state["db"]), update_nav_labels(), refresh()), filled=(state["db"].get("lang", "ru") == "ru"), small=True),
-                            pill_btn("EN", theme, lambda e: (play_click(), state["db"].update({"lang": "en"}), save_db(state["db"]), update_nav_labels(), refresh()), filled=(state["db"].get("lang", "ru") == "en"), small=True),
+                            pill_btn("RU", theme, lambda e: (play_click(), state["db"].update({"lang": "en"}), save_db(state["db"]), update_nav_labels(), refresh()), filled=(state["db"].get("lang", "en") == "ru"), small=True),
+                            pill_btn("EN", theme, lambda e: (play_click(), state["db"].update({"lang": "en"}), save_db(state["db"]), update_nav_labels(), refresh()), filled=(state["db"].get("lang", "en") == "en"), small=True),
                         ],
                         spacing=8,
                     ),

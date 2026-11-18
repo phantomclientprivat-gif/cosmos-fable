@@ -1,6 +1,6 @@
 STRINGS = {
     "ru": {
-        "local_db": "Локальная база (Arch Linux)",
+        "local_db": "Локальная сеть Wi-Fi",
         "backup_done": "Бэкап создан",
         "tab_food": "КБЖУ",
         "tab_gym": "Зал",
@@ -52,7 +52,7 @@ STRINGS = {
         "wd": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
     },
     "en": {
-        "local_db": "Local Database (Desktop)",
+        "local_db": "Wi-Fi Local Network",
         "backup_done": "Backup created",
         "tab_food": "Macros",
         "tab_gym": "Gym",
@@ -120,7 +120,7 @@ AUTO_NAMES = {
 
 
 def tr(db: dict, key: str, **kwargs):
-    lang = db.get("lang", "ru")
+    lang = db.get("lang", "en")
     val = STRINGS.get(lang, STRINGS["ru"]).get(key, STRINGS["ru"].get(key, key))
     if isinstance(val, str) and kwargs:
         return val.format(**kwargs)
@@ -128,7 +128,7 @@ def tr(db: dict, key: str, **kwargs):
 
 
 def tr_item(db: dict, text: str) -> str:
-    if db.get("lang", "ru") == "en":
+    if db.get("lang", "en") == "en":
         return AUTO_NAMES.get(text, text)
     return text
 
