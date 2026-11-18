@@ -46,17 +46,17 @@ def build_food_page(page: ft.Page, db: dict, theme: dict, open_sheet, close_shee
 
     def open_add_sheet(e):
         play_click()
-        search_in = styled_input("Поиск в базе (55+ и твои продукты)", theme)
+        search_in = styled_input(tr(db, "search_food"), theme)
         results_col = ft.Column(spacing=4)
 
-        n_in = styled_input("Название блюда", theme)
-        g_in = styled_input("Вес (г)", theme, "100", width=95)
-        k_in = styled_input("Ккал (авто)", theme, width=105)
-        p_in = styled_input("Белки", theme, width=78)
-        f_in = styled_input("Жиры", theme, width=78)
-        c_in = styled_input("Углев.", theme, width=78)
-        tpl_chk = ft.Checkbox(label="В шаблоны дня", value=False, fill_color=theme["accent"])
-        db_chk = ft.Checkbox(label="В общую базу (на 100 г)", value=False, fill_color="#34d399")
+        n_in = styled_input(tr(db, "dish_name"), theme)
+        g_in = styled_input(tr(db, "weight_g"), theme, "100", width=95)
+        k_in = styled_input(tr(db, "kcal_auto"), theme, width=105)
+        p_in = styled_input(tr(db, "protein"), theme, width=78)
+        f_in = styled_input(tr(db, "fat"), theme, width=78)
+        c_in = styled_input(tr(db, "carbs"), theme, width=78)
+        tpl_chk = ft.Checkbox(label=tr(db, "save_tpl"), value=False, fill_color=theme["accent"])
+        db_chk = ft.Checkbox(label=tr(db, "save_db"), value=False, fill_color="#34d399")
 
         selected_prod = {"item": None}
 
@@ -136,14 +136,14 @@ def build_food_page(page: ft.Page, db: dict, theme: dict, open_sheet, close_shee
                     page.update()
 
         open_sheet(ft.Column([
-            ft.Text("Добавить прием пищи", size=20, weight=ft.FontWeight.BOLD, color="#ffffff"),
+            ft.Text(tr(db, "add_meal"), size=20, weight=ft.FontWeight.BOLD, color="#ffffff"),
             search_in, results_col,
             ft.Divider(color="#334155", height=4),
             n_in,
             ft.Row([g_in, k_in], spacing=8),
             ft.Row([p_in, f_in, c_in], spacing=8),
             ft.Row([tpl_chk, db_chk], wrap=True),
-            pill_btn("Записать в дневник", theme, submit, icon=ft.Icons.CHECK),
+            pill_btn(tr(db, "log_meal"), theme, submit, icon=ft.Icons.CHECK),
         ], spacing=8, scroll=ft.ScrollMode.AUTO))
 
     header = ft.Row([

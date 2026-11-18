@@ -3,7 +3,7 @@ import datetime
 from core import today_str
 import threading
 import flet as ft
-from core import load_db, save_db, create_backup
+from core import load_db, save_db, create_backup, get_local_ip, start_wifi_server, sync_via_wifi
 from page_food import build_food_page
 from page_gym import build_gym_page
 from page_ml import build_ml_page
@@ -86,18 +86,18 @@ def main(page: ft.Page):
         def open_macros_sheet(e):
             play_click()
             sel_goal = {"val": prof.get("goal_mode", "norm")}
-            w_i = styled_input("Вес (кг)", theme, prof.get("weight", 70), expand=True)
-            h_i = styled_input("Рост (см)", theme, prof.get("height", 175), expand=True)
-            a_i = styled_input("Возраст", theme, prof.get("age", 16), expand=True)
-            gk_i = styled_input("Ккал", theme, food.get("goal_kcal", 2500), expand=True)
-            gp_i = styled_input("Белки", theme, food.get("goal_p", 150), expand=True)
-            gf_i = styled_input("Жиры", theme, food.get("goal_f", 80), expand=True)
-            gc_i = styled_input("Углев.", theme, food.get("goal_c", 290), expand=True)
+            w_i = styled_input(tr(state["db"], "w_kg"), theme, prof.get("weight", 70), expand=True)
+            h_i = styled_input(tr(state["db"], "h_cm"), theme, prof.get("height", 175), expand=True)
+            a_i = styled_input(tr(state["db"], "age"), theme, prof.get("age", 16), expand=True)
+            gk_i = styled_input(tr(state["db"], "kcal"), theme, food.get("goal_kcal", 2500), expand=True)
+            gp_i = styled_input(tr(state["db"], "protein"), theme, food.get("goal_p", 150), expand=True)
+            gf_i = styled_input(tr(state["db"], "fat"), theme, food.get("goal_f", 80), expand=True)
+            gc_i = styled_input(tr(state["db"], "carbs"), theme, food.get("goal_c", 290), expand=True)
 
             goal_row = ft.Row(spacing=6)
 
             def render_goals():
-                modes = [("cut", "Сушка"), ("norm", "Норма"), ("bulk", "Массонабор")]
+                modes = [("cut", tr(state["db"], "cut")), ("norm", tr(state["db"], "norm")), ("bulk", tr(state["db"], "bulk"))]
                 goal_row.controls = [
                     pill_btn(lbl, theme, lambda ev, m=m: (play_click(), sel_goal.update({"val": m}), render_goals(), auto_calc()), filled=(sel_goal["val"] == m), small=True)
                     for m, lbl in modes
@@ -139,19 +139,19 @@ def main(page: ft.Page):
                     page.update()
 
             open_sheet(ft.Column([
-                ft.Text("Антропометрия и КБЖУ", size=20, weight=ft.FontWeight.BOLD, color="#ffffff"),
+                ft.Text(tr(state["db"], "stats_sheet"), size=20, weight=ft.FontWeight.BOLD, color="#ffffff"),
                 goal_row,
                 ft.Row([w_i, h_i, a_i], spacing=8),
                 ft.Row([gk_i, gp_i], spacing=8),
                 ft.Row([gf_i, gc_i], spacing=8),
-                ft.Row([pill_btn("Авторасчет", theme, auto_calc, filled=False, small=True), pill_btn("Сохранить", theme, save_all, icon=ft.Icons.CHECK, small=True)], spacing=8),
+                ft.Row([pill_btn(tr(state["db"], "auto_calc"), theme, auto_calc, filled=False, small=True), pill_btn(tr(state["db"], "save"), theme, save_all, icon=ft.Icons.CHECK, small=True)], spacing=8),
             ], spacing=12, scroll=ft.ScrollMode.AUTO))
 
         def open_theme_sheet(e):
             play_click()
-            n_i = styled_input("Название темы", theme)
-            bg_i = styled_input("Фон HEX", theme, theme["bg"])
-            ac_i = styled_input("Акцент HEX", theme, theme["accent"])
+            n_i = styled_input(tr(state["db"], "theme_name"), theme)
+            bg_i = styled_input(tr(state["db"], "bg_hex"), theme, theme["bg"])
+            ac_i = styled_input(tr(state["db"], "acc_hex"), theme, theme["accent"])
 
             def add_th(ev):
                 play_click()
@@ -163,7 +163,7 @@ def main(page: ft.Page):
                     apply_th(item)
                     close_sheet()
 
-            open_sheet(ft.Column([ft.Text("Новая палитра", size=20, weight=ft.FontWeight.BOLD, color="#ffffff"), n_i, bg_i, ac_i, pill_btn("Создать тему", theme, add_th, icon=ft.Icons.PALETTE)], spacing=10, scroll=ft.ScrollMode.AUTO))
+            open_sheet(ft.Column([ft.Text(tr(state["db"], "new_theme"), size=20, weight=ft.FontWeight.BOLD, color="#ffffff"), n_i, bg_i, ac_i, pill_btn(tr(state["db"], "create_theme"), theme, add_th, icon=ft.Icons.PALETTE)], spacing=10, scroll=ft.ScrollMode.AUTO))
 
         def apply_th(it):
             play_click()
@@ -319,7 +319,7 @@ def main(page: ft.Page):
     )
 
     def update_nav_labels():
-        sync_lbl.value = tr(state["db"], "local_db")
+        sync_lbl.value = f"Wi-Fi IP: {my_ip}"
         nav_bar.destinations[0].label = tr(state["db"], "tab_food")
         nav_bar.destinations[1].label = tr(state["db"], "tab_gym")
         nav_bar.destinations[2].label = tr(state["db"], "tab_notes")

@@ -53,11 +53,11 @@ def build_ml_page(page: ft.Page, db: dict, theme: dict, file_picker: ft.FilePick
     def open_task_sheet(e):
         play_click()
         cur_f = ml.get("filter", "Все")
-        act_st = cur_f if cur_f != "Все" else (stages if stages else "Общее")
-        st_in = styled_input("Новая папка / раздел", theme)
-        t_in = styled_input(f"Задача в «{act_st}»", theme)
-        d_in = styled_input("Дата (ГГГГ-ММ-ДД)", theme, today)
-        bulk_in = styled_input("Или вставь список задач (каждая с новой строки)", theme, multiline=True)
+        act_st = cur_f if cur_f != "Все" else (stages[0] if stages else "General")
+        st_in = styled_input(tr(db, "new_folder"), theme)
+        t_in = styled_input(tr(db, "task_in", st=tr_item(db, act_st)), theme)
+        d_in = styled_input(tr(db, "date_fmt"), theme, today)
+        bulk_in = styled_input(tr(db, "bulk_hint"), theme, multiline=True)
 
         def save_all(ev):
             play_click()
@@ -84,15 +84,15 @@ def build_ml_page(page: ft.Page, db: dict, theme: dict, file_picker: ft.FilePick
                 refresh()
 
         open_sheet(ft.Column([
-            ft.Text("Добавить в план", size=20, weight=ft.FontWeight.BOLD, color="#ffffff"),
+            ft.Text(tr(db, "add_plan"), size=20, weight=ft.FontWeight.BOLD, color="#ffffff"),
             st_in, t_in, d_in, bulk_in,
-            pill_btn("Сохранить", theme, save_all, icon=ft.Icons.CHECK),
+            pill_btn(tr(db, "save"), theme, save_all, icon=ft.Icons.CHECK),
         ], spacing=10, scroll=ft.ScrollMode.AUTO))
 
     def open_note_sheet(e):
         play_click()
         att = {"name": "", "content": ""}
-        f_lbl_att = ft.Text("Файл не выбран", size=12, color="#94a3b8")
+        f_lbl_att = ft.Text(tr(db, "no_file"), size=12, color="#94a3b8")
 
         def on_pick(ev):
             if ev.files:
@@ -108,9 +108,9 @@ def build_ml_page(page: ft.Page, db: dict, theme: dict, file_picker: ft.FilePick
                 page.update()
 
         file_picker.on_result = on_pick
-        tag_in = styled_input("Тег", theme, "Конспект")
-        title_in = styled_input("Заголовок", theme)
-        code_in = styled_input("Текст / Код", theme, multiline=True)
+        tag_in = styled_input(tr(db, "tag"), theme, "Конспект")
+        title_in = styled_input(tr(db, "title"), theme)
+        code_in = styled_input(tr(db, "body_code"), theme, multiline=True)
 
         def save_n(ev):
             play_click()
@@ -123,10 +123,10 @@ def build_ml_page(page: ft.Page, db: dict, theme: dict, file_picker: ft.FilePick
                 refresh()
 
         open_sheet(ft.Column([
-            ft.Text("Новая заметка", size=20, weight=ft.FontWeight.BOLD, color="#ffffff"),
+            ft.Text(tr(db, "new_note"), size=20, weight=ft.FontWeight.BOLD, color="#ffffff"),
             tag_in, title_in, code_in,
-            ft.Row([pill_btn("Файл", theme, lambda ev: (play_click(), file_picker.pick_files()), icon=ft.Icons.ATTACH_FILE, filled=False, small=True), f_lbl_att]),
-            pill_btn("Сохранить", theme, save_n, icon=ft.Icons.CHECK),
+            ft.Row([pill_btn(tr(db, "file"), theme, lambda ev: (play_click(), file_picker.pick_files()), icon=ft.Icons.ATTACH_FILE, filled=False, small=True), f_lbl_att]),
+            pill_btn(tr(db, "save"), theme, save_n, icon=ft.Icons.CHECK),
         ], spacing=10, scroll=ft.ScrollMode.AUTO))
 
     sub_bar = ft.Row([

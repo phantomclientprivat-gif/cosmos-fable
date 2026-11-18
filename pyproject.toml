@@ -1,0 +1,8 @@
+[project]
+name = "cosmos_fable"
+version = "1.0.0"
+description = "Cosmos Fable Tracker"
+dependencies = ["flet==1.1.2", "httpx"]
+
+[tool.flet.app]
+path = "."

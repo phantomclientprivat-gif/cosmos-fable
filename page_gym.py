@@ -60,11 +60,11 @@ def build_gym_page(page: ft.Page, db: dict, theme: dict, open_sheet, close_sheet
         play_click()
         e_idx = w.get("edit_idx", 0) % len(cyc)
         ed = cyc[e_idx]
-        name_in = styled_input("Название этапа", theme, ed["name"])
-        rest_chk = ft.Checkbox(label="Это день отдыха", value=ed.get("rest", False), fill_color="#34d399")
-        ex_n = styled_input("Упражнение", theme, expand=True)
-        ex_s = styled_input("Подх", theme, "4", width=62)
-        ex_r = styled_input("Повт", theme, "10", width=66)
+        name_in = styled_input(tr(db, "stage_name"), theme, tr_item(db, ed["name"]))
+        rest_chk = ft.Checkbox(label=tr(db, "is_rest"), value=ed.get("rest", False), fill_color="#34d399")
+        ex_n = styled_input(tr(db, "exercise"), theme, expand=True)
+        ex_s = styled_input(tr(db, "sets"), theme, "4", width=62)
+        ex_r = styled_input(tr(db, "reps"), theme, "10", width=66)
 
         tabs = [
             ft.Container(
@@ -83,7 +83,7 @@ def build_gym_page(page: ft.Page, db: dict, theme: dict, open_sheet, close_sheet
         ]
 
         open_sheet(ft.Column([
-            ft.Text("Конструктор цикла", size=19, weight=ft.FontWeight.BOLD, color="#ffffff"),
+            ft.Text(tr(db, "cycle_editor"), size=19, weight=ft.FontWeight.BOLD, color="#ffffff"),
             ft.Row([
                 *tabs,
                 ft.IconButton(icon=ft.Icons.ADD_CIRCLE, icon_color=theme["accent"], on_click=lambda ev: (play_click(), cyc.append({"name": f"День {len(cyc)+1}", "rest": False, "ex": []}), w.update({"edit_idx": len(cyc)-1}), save_db(db), open_cycle_editor(None))),
