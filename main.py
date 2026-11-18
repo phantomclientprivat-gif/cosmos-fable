@@ -12,6 +12,7 @@ from ui_kit import glass_card, pill_btn, styled_input
 
 def main(page: ft.Page):
     page.title = "Cosmos Fable"
+    page.window.icon = "assets/icon.png"
     page.padding = 0
     page.window.width = 415
     page.window.height = 850
