@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+cosmos_fable.json
+backups/
+build/
+.flet/
