@@ -275,7 +275,7 @@ def main(page: ft.Page):
                     ft.Text(tr(state["db"], "lang_label"), size=14, weight=ft.FontWeight.BOLD, color="#ffffff"),
                     ft.Row(
                         controls=[
-                            pill_btn("RU", theme, lambda e: (play_click(), state["db"].update({"lang": "en"}), save_db(state["db"]), update_nav_labels(), refresh()), filled=(state["db"].get("lang", "en") == "ru"), small=True),
+                            pill_btn("RU", theme, lambda e: (play_click(), state["db"].update({"lang": "ru"}), save_db(state["db"]), update_nav_labels(), refresh()), filled=(state["db"].get("lang", "en") == "ru"), small=True),
                             pill_btn("EN", theme, lambda e: (play_click(), state["db"].update({"lang": "en"}), save_db(state["db"]), update_nav_labels(), refresh()), filled=(state["db"].get("lang", "en") == "en"), small=True),
                         ],
                         spacing=8,
